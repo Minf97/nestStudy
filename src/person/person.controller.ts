@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('api/person')
 export class PersonController {
@@ -22,8 +23,19 @@ export class PersonController {
     return `received: id:${id}`
   }
 
+  // 3. form urlencoded 4. json
   @Post()
-  body(@Body() CreatePersonDto: CreatePersonDto) {
-    return `received: ${JSON.stringify(CreatePersonDto)}`
+  body(@Body() createPersonDto: CreatePersonDto) {
+    return `received: ${JSON.stringify(createPersonDto)}`
+  }
+
+  // 5. form data
+  @Post('file')
+  @UseInterceptors(AnyFilesInterceptor({
+    dest: 'uploads/'
+  }))
+  body2(@Body() createPersonDto: CreatePersonDto, @UploadedFiles() files: Array<Express.Multer.File>) {
+    console.log(files);
+    return `received: ${JSON.stringify(createPersonDto)}`
   }
 }
