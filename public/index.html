@@ -1,11 +1,34 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    hello
-</body>
+    <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script>
+  </head>
+  <script>
+    async function urlParam() {
+      const res = await axios.get('/api/person/1');
+      console.log(res);
+      document.getElementById('res').innerText = JSON.stringify(res);
+    }
+    urlParam();
+
+    async function query() {
+      const res = await axios.get('/api/person/find', {
+        params: {
+          name: '光',
+          age: 20,
+        },
+      });
+      console.log(res);
+    }
+    query();
+  </script>
+  <body>
+    <div>
+      response:
+      <div id="res">123</div>
+    </div>
+  </body>
 </html>
